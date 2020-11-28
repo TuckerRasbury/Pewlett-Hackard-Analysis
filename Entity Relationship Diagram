@@ -1,0 +1,45 @@
+# Quick Database Diagrams - Entity Relationship Diagram
+-
+## link: https://app.quickdatabasediagrams.com/#/
+
+Departments
+-
+dept_no varchar pk
+dept_name varchar fk
+
+Dept_Emp
+-
+emp_no int pk 
+dept_no varchar pk fk - Departments.dept_no
+from_date date fk
+to_date date fk
+
+Managers
+-
+dept_no varchar pk fk - Departments.dept_no
+emp_no int pk fk - Employees.emp_no
+from_date date fk
+to_date date fk
+
+Employees
+-
+emp_no int pk fk - Dept_Emp.emp_no
+birth_date date fk
+first_name varchar fk
+last_name varchar fk
+gender varchar fk
+hire_date date fk
+
+
+Salaries
+-
+emp_no int pk fk - Dept_Emp.emp_no fk - Employees.emp_no 
+from_date date fk
+to_date date fk
+
+Titles
+-
+emp_no int pk fk - Salaries.emp_no fk - Employees.emp_no
+title varchar pk fk
+from_date date pk fk
+to_date date
