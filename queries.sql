@@ -6,6 +6,8 @@ CREATE TABLE departments (
      UNIQUE (dept_name)
 );
 
+SELECT * FROM departments;
+
 CREATE TABLE employees (
 	 emp_no INT NOT NULL,
      birth_date DATE NOT NULL,
@@ -220,6 +222,7 @@ SELECT * FROM skill_drill
 -- 		employee's departments
 
 -- List #1 - The first requested list is general employee information, but with their current salaries included.
+
 SELECT e.emp_no, 
 	e.first_name,
 	e.last_name,
@@ -236,6 +239,9 @@ WHERE (e.birth_date BETWEEN '1952-01-01' AND '1955-12-31')
      AND (e.hire_date BETWEEN '1985-01-01' AND '1988-12-31')
 	 AND (de.to_date = '9999-01-01');
 
+DROP TABLE emp_info
+SELECT * FROM emp_info;
+
 -- List #2 - This list includes the manager's employee number, first name, last name, and their starting and ending employment dates.
 -- List of managers per department
 SELECT  dm.dept_no,
@@ -251,6 +257,8 @@ FROM dept_manager AS dm
         ON (dm.dept_no = d.dept_no)
     INNER JOIN current_emp AS ce
         ON (dm.emp_no = ce.emp_no);
+		
+SELECT * FROM manager_info;
 
 -- List #3 - The final list needs only to have the departments added to the current_emp table.
 SELECT ce.emp_no,
@@ -272,19 +280,49 @@ FROM current_emp as ce
 -- 7.3.6 Creating a Tailored List
 -- To this point we have: Think of it: We started with only six CSV files and no real database or data management system in place. Now, we have created a model of the database with an ERD, imported data, and to tie it all together, we have performed many queries to help PH future-proof the company.
 
--- A. Sales' Request 
-	--1) Join w/ dept_emp (emp_no, dept_no) and departments (dept_no, dept_name), 
-	--2) filtered for sales only, 
-	--3) filtered for sales and development
+SELECT * FROM retirement_info;
+SELECT * FROM current_emp;
+
+-- A. Sales' Request
  
--- A1)
-SELECT  
-
-FROM retirement_info as ri
-
-
+SELECT e.emp_no, 
+	e.first_name,
+	e.last_name,
+    e.gender,
+    s.salary,
+    de.to_date
+INTO sales_dept_info
+FROM employees as e
+INNER JOIN salaries as s
+ON (e.emp_no = s.emp_no)
+INNER JOIN dept_emp as de
+ON (e.emp_no = de.emp_no)
+WHERE (e.birth_date BETWEEN '1952-01-01' AND '1955-12-31')
+     AND (e.hire_date BETWEEN '1985-01-01' AND '1988-12-31')
+	 AND (de.to_date = '9999-01-01')
+	 AND (de.dept_no = 'd007');
+		
+DROP TABLE sales_dept_info;
+SELECT * FROM sales_dept_info;
+		
 -- B. For Sales and Dev.
-	-- Perform A3 but using an IN command in a WHERE function
+SELECT e.emp_no, 
+	e.first_name,
+	e.last_name,
+    e.gender,
+    s.salary,
+    de.to_date
+INTO sales_dev_dept_info
+FROM employees as e
+INNER JOIN salaries as s
+ON (e.emp_no = s.emp_no)
+INNER JOIN dept_emp as de
+ON (e.emp_no = de.emp_no)
+WHERE (e.birth_date BETWEEN '1952-01-01' AND '1955-12-31')
+     AND (e.hire_date BETWEEN '1985-01-01' AND '1988-12-31')
+	 AND (de.to_date = '9999-01-01')
+	 AND (de.dept_no = 'd007' or de.dept_no = 'd005');
 
+SELECT * FROM sales_dev_dept_info;
 
 
