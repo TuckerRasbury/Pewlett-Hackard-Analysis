@@ -222,10 +222,71 @@ ORDER BY COUNT (*) DESC;
 
 -- ______________________________________________________________________________________
 /* Deliverable 2
-The Employees Eligible for the Mentorship Program 
+The Employees Eligible for the Mentorship Program (11 prts)
+
+Objective: create a mentorship-eligibility table that holds the current employees who were born between 
+January 1, 1965 and December 31, 1965. */
 
 
+ -- 1. 
+ SELECT emp_no, first_name, last_name, birth_date
+ FROM employees;
+ 
+ --2. 
+ SELECT from_date, to_date
+ FROM dep_emp;
+ 
+-- 3.
+SELECT title
+FROM titles;
 
+SELECT * FROM unique_titles;
+
+-- 4.
+SELECT DISTINCT ON (emp_no)
+*
+FROM retirement_titles
+ORDER BY emp_no;
+
+
+-- 5. 
+SELECT DISTINCT ON (emp_no)
+*
+INTO mentorship_eligibility
+FROM unique_titles
+ORDER BY emp_no;
+
+-- 6. Join employees and department employees
+SELECT
+employees.emp_no, employees.first_name, employees.last_name, employees.birth_date,
+dept_emp.dept_no, dept_emp.dept_name, dept_emp.from_date, dept_emp.to_date
+FROM employees
+INNER JOIN dept_emp ON employees.emp_no = dept_emp.emp_no;
+
+-- 7. Join employees and titles
+SELECT
+employees.emp_no, employees.first_name, employees.last_name, employees.birth_date,
+titles.from_date, titles.to_date, titles.title
+FROM employees
+INNER JOIN titles ON employees.emp_no = titles.emp_no;
+
+-- 8. Filter the data on the to_date column to get current employees whose birth dates are between January 1, 1965 and December 31, 1965.
+-- 9. Order the table by the employee number.
+
+SELECT DISTINCT ON (employees.emp_no)
+employees.emp_no, employees.first_name, employees.last_name, employees.birth_date,
+titles.from_date, titles.to_date, titles.title
+INTO mentorship_eligibility
+FROM employees
+INNER JOIN titles 
+	ON employees.emp_no = titles.emp_no
+INNER JOIN dept_emp
+	on employees.emp_no = dept_emp.emp_no
+WHERE (birth_date BETWEEN '1965-01-01' AND '1965-12-31')
+		AND (titles.to_date = '9999-01-01')
+ORDER BY employees.emp_no;
+
+SELECT * FROM mentorship_eligibility;
 
 -- ______________________________________________________________________________________
 /* Deliverable 3
